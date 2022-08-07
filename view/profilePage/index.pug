@@ -6,10 +6,12 @@ head
   title Profile
   link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css')
   link(rel='stylesheet' href='style.css')
+  script(src="script.js" type="module" defer)
 // navbar
 .navBar
   img.logo(src='images/logo.png' alt='')
-  button.navBtn(type='button') Check Report
+  button.navBtn(type='button') 
+    a(href="../patient/check") Check Report
 .container
   .box
     .details
@@ -23,7 +25,8 @@ head
         b Email:
         |  doctor@gmail.com
     .buttons
-      button#addPatient(type='button') Add new Patient
+      button#addPatient(type='button') 
+          a(href="../patient/add" target="_blank") Add new Patient
       button#logout(type='button') Log out
   .patients
     table.table
@@ -38,6 +41,7 @@ head
           th Risk%(right)
       tbody
         each val in data
+          tr
             td= val.name 
             td= val.age 
             td= val.gender

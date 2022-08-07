@@ -56,14 +56,14 @@ Router.post('/add', upload.fields([
                 })
                 gm(path.join(__dirname,"../",req.files.profile[0].path)).resize(512).write(path.join(__dirname,"../",req.files.profile[0].path),async (err)=>{
                     if(!err){
-                        let buffe = fs.readFileSync(path.join(__dirname,"../", req.files.profile[0].path));
+                        let buffe = fs.readFileSync(path.join(__dirname,"../", req.files.profile[0].path),{encoding:'base64'});
                         let ext = path.extname(req.files.profile[0].originalname)
                         patientDetail.profile={
                             "pic":buffe,
                             "contentType":ext
                         }
                     }else{
-                        let buffe = fs.readFile(path.join(__dirname,"../","defaultImg/profile.png"),{encoding:'base64'})
+                        let buffe = fs.readFile(path.join(__dirname,"../","defaultImg/profile.png"))
                         let ext = 
                         patientDetail.profile={
                             "pic":buffe,
@@ -81,7 +81,7 @@ Router.post('/add', upload.fields([
                         })
                     } else {
                         console.log(path.join(__dirname, "../", req.files.leftEye[0].path))
-                        let buff= fs.readFileSync(path.join(__dirname, "../", req.files.leftEye[0].path),{'encoding':'base64'})
+                        let buff= fs.readFileSync(path.join(__dirname, "../", req.files.leftEye[0].path))
                         patientDetail.leftEye = {
                             "pic": buff,
                             "contentType": "image/jpg"
@@ -95,7 +95,7 @@ Router.post('/add', upload.fields([
                                     "mssg": "Failed to process image"
                                 })
                             } else {
-                                let buf = fs.readFileSync(path.join(__dirname,"../",req.files.rightEye[0].path),{'encoding':'base64'})
+                                let buf = fs.readFileSync(path.join(__dirname,"../",req.files.rightEye[0].path))
                                 patientDetail.rightEye = {
                                     "pic": buf,
                                     "contentType": "image/jpg"
@@ -163,12 +163,14 @@ Router.post('/check', body('name', "Name fiels is compulsory").notEmpty().isStri
                 "mssg": "No data in the given user Name"
             })
         } else {
-            console.log(data)
             res.status(200).json({
                 "status": true,
                 "data":{
                     "leftEyeProblem":leftEyeProblem,
-                    "rightEyeProblem":rightEyeProblem
+                    "rightEyeProblem":rightEyeProblem,
+                    "age":data.age,
+                    "gender":data.gender,
+                    "img":`data:image/jpg;base64,${data.profile.pic}`
                 }
             })
         }
@@ -177,21 +179,19 @@ Router.post('/check', body('name', "Name fiels is compulsory").notEmpty().isStri
 
 
 Router.get('/report',async (req,res)=>{
-    if(!req.session.patient){
+    if(false){
         res.status(400).json({
             status:false,
             "mssg":"No patient id found"
         })
     }else{
         try{
-            console.log(req.session)
-            contactNumber = req.session.patient
             let result = await patientModel.findOne({
-                contactNumber:contactNumber
+                contactNumber:"9840170829"
             })
             res.status(200).render('patient',{
                 name:result.name,
-                left:`data:image/jpg;base64,${result.leftEye.pic}`
+                left:`data:image/jpg;base64,${result.profile.pic}`
             })
         }catch(error){
             console.log(error);

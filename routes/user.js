@@ -30,4 +30,16 @@ router.post('/',async (req,res)=>{
     console.log(result)
 })
 
+router.get('/logout',async (req,res)=>{
+    console.log("We are logging out");
+    try{
+        console.log(req.session)
+        req.session.destroy();
+        console.log("We destryoed database");
+        console.log(req.session);
+    }catch(err){
+        console.log(err)
+    }
+})
+
 module.exports = router;
