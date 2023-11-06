@@ -11,13 +11,13 @@ PORT_NUMBER = process.env.PORT || 3000
 
 const app = express()
 
-//This is the stage we connect to the database
-mongoose.connect("mongodb+srv://RonnieJ:XPTHZSRxgRSSlPV7@cluster0.apwhp.mongodb.net/?retryWrites=true&w=majority").then((data)=>{
-    console.log("Have we been able to connect to the database")
-}).catch((err)=>{
-    console.log("The connection to the database has been successfull actually now");
-    console.log(err);
-})
+ //This is the stage we connect to the database
+ mongoose.connect("mongodb+srv://aniket123:AniketShinde321@cluster0.f2pbjsh.mongodb.net/").then((data)=>{
+     console.log("Have we been able to connect to the database")
+ }).catch((err)=>{
+     console.log("The connection to the database has been successfull actually now");
+     console.log(err);
+ })
 
 //We set the static folder in this section and also set express related settings in this section
 
@@ -29,17 +29,17 @@ app.use(express.urlencoded({ extended: false }))
 
 
 //We might maintain express session from here if needed
-const store = mongoStore.create({
-    client: mongoose.connection.getClient(),
-    dbName: "test"
-})
+// const store = mongoStore.create({
+//     client: mongoose.connection.getClient(),
+//     dbName: "test"
+// })
 app.use(session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     cookie: { maxAge: 86400000 },
     resave: false,
     rolling: true,
-    store: store
+    // store: store
 }))
 
 //Here we are setting up the multer to store file to the database
